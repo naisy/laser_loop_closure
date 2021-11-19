@@ -11,12 +11,17 @@ if (NOT GTSAM_FOUND)
   message(FATAL_ERROR "This program requires the GTSAM library.")
 endif(NOT GTSAM_FOUND)
 
+find_package( Boost REQUIRED COMPONENTS timer)
+include_directories( ${Boost_INCLUDE_DIRS} )
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   geometry_utils
   parameter_utils
   point_cloud_filter
+  pose_graph_msgs
   visualization_msgs
+  std_msgs
   pcl_ros
 )
 
@@ -28,7 +33,9 @@ catkin_package(
     geometry_utils
     parameter_utils
     point_cloud_filter
+    pose_graph_msgs
     visualization_msgs
+    std_msgs
     pcl_ros
   DEPENDS
     PCL
@@ -50,6 +57,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
   ${GTSAM_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -62,5 +70,6 @@ add_library(${PROJECT_NAME} src/LaserLoopClosure.cc)
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
+  ${Boost_LIBRARIES}
   gtsam
 )
